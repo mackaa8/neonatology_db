@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Add Newborn{% endblock %}
+
+{% block content %}
+<h2>Add Newborn</h2>
+<p>Complete the form below to register a new newborn and record measurements.</p>
+
+{% if dziecko_form.errors or params_form.errors or apgar_form.errors %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+  <strong>Errors in form:</strong>
+  {% if dziecko_form.errors %}
+    <div>Baby Data:</div>
+    {{ dziecko_form.errors }}
+  {% endif %}
+  {% if params_form.errors %}
+    <div>External Parameters:</div>
+    {{ params_form.errors }}
+  {% endif %}
+  {% if apgar_form.errors %}
+    <div>APGAR Scores:</div>
+    {{ apgar_form.errors }}
+  {% endif %}
+</div>
+{% endif %}
+
+<form method="post" style="max-width: 600px;">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Baby Data</legend>
+    {{ dziecko_form.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>External Parameters</legend>
+    {{ params_form.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>APGAR Scores</legend>
+    {{ apgar_form.as_p }}
+  </fieldset>
+
+  <button type="submit" class="btn">Submit</button>
+  <a href="/" class="btn" style="background: #95a5a6; margin-left: 10px;">Cancel</a>
+</form>
+{% endblock %}

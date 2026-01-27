@@ -1,0 +1,6 @@
+get'em możemy sobie pobierać dane; w naszym linku "term = ''" będzie odnośnikiem do danych danych
+POST
+
+- ogarnąć DATY, żeby można było wpisać różny format albo określić format; ALBO WYBIERAĆ!
+- naprawić przyciski co się skleiły 
+- żeby dało się wejść w Andrzeja

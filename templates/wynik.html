@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Result{% endblock %}
+
+{% block content %}
+<h2>Verification Result</h2>
+{% if dziecko %}
+  <p><strong>Newborn:</strong> {{ dziecko.imie }}</p>
+  <p><strong>Date of Birth:</strong> {{ dziecko.data_urodzenia }}</p>
+{% endif %}
+<hr>
+<pre style="background: #f5f5f5; padding: 15px; border-radius: 5px;">{{ werdykt }}</pre>
+<hr>
+<p>
+  <a href="/dodaj_noworodka/" class="btn">Add Another Newborn</a>
+  <a href="/raporty/" class="btn" style="background: #27ae60; margin-left: 10px;">View All Records</a>
+</p>
+{% endblock %}

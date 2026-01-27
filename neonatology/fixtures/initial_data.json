@@ -1,0 +1,187 @@
+[
+  {
+    "model": "neonatology.dziecko",
+    "pk": 1,
+    "fields": {
+      "imie": "Adam",
+      "data_urodzenia": "2025-11-20",
+      "plec": "M",
+      "pesel_matki": "85012300001"
+    }
+  },
+  {
+    "model": "neonatology.dziecko",
+    "pk": 2,
+    "fields": {
+      "imie": "Zuzanna",
+      "data_urodzenia": "2025-11-21",
+      "plec": "K",
+      "pesel_matki": "79051512345"
+    }
+  },
+  {
+    "model": "neonatology.dziecko",
+    "pk": 3,
+    "fields": {
+      "imie": "Filip",
+      "data_urodzenia": "2025-11-22",
+      "plec": "M",
+      "pesel_matki": "92080854321"
+    }
+  },
+  {
+    "model": "neonatology.dziecko",
+    "pk": 4,
+    "fields": {
+      "imie": "Maja",
+      "data_urodzenia": "2025-11-23",
+      "plec": "K",
+      "pesel_matki": "88121298765"
+    }
+  },
+  {
+    "model": "neonatology.dziecko",
+    "pk": 5,
+    "fields": {
+      "imie": "Piotr",
+      "data_urodzenia": "2025-11-24",
+      "plec": "M",
+      "pesel_matki": "95060611223"
+    }
+  },
+  {
+    "model": "neonatology.parametryzewnetrzne",
+    "pk": 1,
+    "fields": {
+      "dziecko": 1, 
+      "lekarz": null,
+      "data_pomiaru": "2025-11-20T10:30:00Z",
+      "wzrost_cm": 54.0,
+      "waga_kg": 3.65,
+      "czy_wczesniak": false,
+      "obwod_glowy_cm": 36.0,
+      "oddechy_na_min": 45,
+      "natlenienie_spO2": 98
+    }
+  },
+  {
+    "model": "neonatology.parametryzewnetrzne",
+    "pk": 2,
+    "fields": {
+      "dziecko": 2,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-21T10:30:00Z",
+      "wzrost_cm": 50.0,
+      "waga_kg": 3.30,
+      "czy_wczesniak": false,
+      "obwod_glowy_cm": 34.5,
+      "oddechy_na_min": 40,
+      "natlenienie_spO2": 99
+    }
+  },
+  {
+    "model": "neonatology.parametryzewnetrzne",
+    "pk": 3,
+    "fields": {
+      "dziecko": 3,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-22T10:30:00Z",
+      "wzrost_cm": 42.0,
+      "waga_kg": 1.85, 
+      "czy_wczesniak": true, 
+      "obwod_glowy_cm": 30.0,
+      "oddechy_na_min": 65, 
+      "natlenienie_spO2": 90
+    }
+  },
+  {
+    "model": "neonatology.parametryzewnetrzne",
+    "pk": 4,
+    "fields": {
+      "dziecko": 4,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-23T10:30:00Z",
+      "wzrost_cm": 53.5,
+      "waga_kg": 3.55,
+      "czy_wczesniak": false,
+      "obwod_glowy_cm": 35.5,
+      "oddechy_na_min": 38,
+      "natlenienie_spO2": 97
+    }
+  },
+  {
+    "model": "neonatology.parametryzewnetrzne",
+    "pk": 5,
+    "fields": {
+      "dziecko": 5,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-24T10:30:00Z",
+      "wzrost_cm": 49.5,
+      "waga_kg": 2.45,
+      "czy_wczesniak": true,
+      "obwod_glowy_cm": 33.0,
+      "oddechy_na_min": 50,
+      "natlenienie_spO2": 96
+    }
+  },
+  {
+    "model": "neonatology.apgarscore",
+    "pk": 1,
+    "fields": {
+      "dziecko": 1,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-20T10:30:00Z",
+      "apgar_1min": 9,
+      "apgar_5min": 10,
+      "apgar_10min": 10
+    }
+  },
+  {
+    "model": "neonatology.apgarscore",
+    "pk": 2,
+    "fields": {
+      "dziecko": 2,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-21T10:30:00Z",
+      "apgar_1min": 8,
+      "apgar_5min": 9,
+      "apgar_10min": 9
+    }
+  },
+  {
+    "model": "neonatology.apgarscore",
+    "pk": 3,
+    "fields": {
+      "dziecko": 3,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-22T10:30:00Z",
+      "apgar_1min": 4, 
+      "apgar_5min": 6, 
+      "apgar_10min": 7
+    }
+  },
+  {
+    "model": "neonatology.apgarscore",
+    "pk": 4,
+    "fields": {
+      "dziecko": 4,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-23T10:30:00Z",
+      "apgar_1min": 9,
+      "apgar_5min": 9,
+      "apgar_10min": 10
+    }
+  },
+  {
+    "model": "neonatology.apgarscore",
+    "pk": 5,
+    "fields": {
+      "dziecko": 5,
+      "lekarz": null,
+      "data_pomiaru": "2025-11-24T10:30:00Z",
+      "apgar_1min": 7,
+      "apgar_5min": 8,
+      "apgar_10min": 9
+    }
+  }
+]

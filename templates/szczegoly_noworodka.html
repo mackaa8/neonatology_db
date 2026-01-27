@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ dziecko.imie }} — Details{% endblock %}
+
+{% block content %}
+<h2>{{ dziecko.imie }} — Newborn Details</h2>
+
+<div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+  <h3>Basic Information</h3>
+  <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;"><em>Data from database — not entered by user</em></p>
+  <table style="width: 100%;">
+    <tr>
+      <td style="padding: 8px; font-weight: bold; width: 150px;">Name:</td>
+      <td style="padding: 8px;">{{ dziecko.imie }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Date of Birth:</td>
+      <td style="padding: 8px;">{{ dziecko.data_urodzenia }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Gender:</td>
+      <td style="padding: 8px;">{{ dziecko.get_plec_display }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Mother PESEL:</td>
+      <td style="padding: 8px;">{{ dziecko.pesel_matki }}</td>
+    </tr>
+  </table>
+</div>
+
+{% if parametry %}
+  <h3>External Parameters</h3>
+  <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+    <thead>
+      <tr style="background: #34495e; color: white;">
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurement Date</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Weight (kg)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Height (cm)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Head Circumference (cm)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Breaths/min</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">O2 Sat (%)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Premature</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for param in parametry %}
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.data_pomiaru|date:"Y-m-d H:i" }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.waga_kg }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.wzrost_cm }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.obwod_glowy_cm }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.oddechy_na_min }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ param.natlenienie_spO2 }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{% if param.czy_wczesniak %}Yes{% else %}No{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p><em>No measurements recorded yet.</em></p>
+{% endif %}
+
+{% if apgar_scores %}
+  <h3>APGAR Scores</h3>
+  <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+    <thead>
+      <tr style="background: #34495e; color: white;">
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurement Date</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">1 Minute</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">5 Minutes</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">10 Minutes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for apgar in apgar_scores %}
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.data_pomiaru|date:"Y-m-d H:i" }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_1min }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_5min }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_10min|default:"—" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p><em>No APGAR scores recorded yet.</em></p>
+{% endif %}
+
+<div style="margin-top: 30px;">
+  <a href="/raporty/" class="btn">Back to Reports</a>
+  <a href="/dodaj_noworodka/" class="btn" style="background: #27ae60;">Add New Newborn</a>
+</div>
+{% endblock %}

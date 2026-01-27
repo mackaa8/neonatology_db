@@ -1,0 +1,17 @@
+Watching for file changes with StatReloader
+[10/Dec/2025 10:22:52] "GET / HTTP/1.1" 302 0
+[10/Dec/2025 10:22:52] "GET /login/ HTTP/1.1" 200 2741
+[10/Dec/2025 10:23:09] "POST /login/ HTTP/1.1" 302 0
+[10/Dec/2025 10:23:09] "GET / HTTP/1.1" 200 2528
+[10/Dec/2025 10:23:39] "GET / HTTP/1.1" 302 0
+[10/Dec/2025 10:23:39] "GET /login/ HTTP/1.1" 200 2741
+[10/Dec/2025 10:23:44] "GET /?id=7ea0c64f-c507-4e38-84fb-75d07f1245d8&vscodeBrowserReqId=1765358624700 HTTP/1.1" 302 0
+[10/Dec/2025 10:23:44] "GET /login/ HTTP/1.1" 200 2741
+C:\Users\User\Desktop\neonatology_db\neonatology\forms.py changed, reloading.
+Watching for file changes with StatReloader
+[10/Dec/2025 10:24:03] "GET /?id=7ea0c64f-c507-4e38-84fb-75d07f1245d8&vscodeBrowserReqId=1765358643766 HTTP/1.1" 302 0
+[10/Dec/2025 10:24:03] "GET /login/ HTTP/1.1" 200 2741
+[10/Dec/2025 10:24:04] "GET /?id=7ea0c64f-c507-4e38-84fb-75d07f1245d8&vscodeBrowserReqId=1765358644544 HTTP/1.1" 302 0
+[10/Dec/2025 10:24:04] "GET /login/ HTTP/1.1" 200 2741
+C:\Users\User\Desktop\neonatology_db\neonatology\models.py changed, reloading.
+Watching for file changes with StatReloader
