@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}{{ dziecko.imie }} — Details{% endblock %}
+{% block title %}{{ dziecko.imie }} — Szczegóły{% endblock %}
 
 {% block content %}
-<h2>{{ dziecko.imie }} — Newborn Details</h2>
+<h2>{{ dziecko.imie }} — Szczegóły noworodka</h2>
 
 <div style="margin-bottom: 20px;">
   <a href="{% url 'historia_zmian' dziecko.id %}" class="btn-custom">Historia zmian</a>
@@ -11,40 +11,40 @@
 </div>
 
 <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
-  <h3>Basic Information</h3>
-  <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;"><em>Data from database — not entered by user</em></p>
+  <h3>Informacje podstawowe</h3>
+  <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;"><em>Dane z bazy danych — nie wprowadzone przez użytkownika</em></p>
   <table style="width: 100%;">
     <tr>
-      <td style="padding: 8px; font-weight: bold; width: 150px;">Name:</td>
+      <td style="padding: 8px; font-weight: bold; width: 150px;">Imię:</td>
       <td style="padding: 8px;">{{ dziecko.imie }}</td>
     </tr>
     <tr>
-      <td style="padding: 8px; font-weight: bold;">Date of Birth:</td>
+      <td style="padding: 8px; font-weight: bold;">Data urodzenia:</td>
       <td style="padding: 8px;">{{ dziecko.data_urodzenia }}</td>
     </tr>
     <tr>
-      <td style="padding: 8px; font-weight: bold;">Gender:</td>
+      <td style="padding: 8px; font-weight: bold;">Płeć:</td>
       <td style="padding: 8px;">{{ dziecko.get_plec_display }}</td>
     </tr>
     <tr>
-      <td style="padding: 8px; font-weight: bold;">Mother PESEL:</td>
+      <td style="padding: 8px; font-weight: bold;">PESEL matki:</td>
       <td style="padding: 8px;">{{ dziecko.pesel_matki }}</td>
     </tr>
   </table>
 </div>
 
 {% if parametry %}
-  <h3>External Parameters</h3>
+  <h3>Parametry zewnętrzne</h3>
   <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
     <thead>
       <tr style="background: #34495e; color: white;">
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurement Date</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Weight (kg)</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Height (cm)</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Head Circumference (cm)</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Breaths/min</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">O2 Sat (%)</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Premature</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data pomiaru</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Waga (kg)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Wzrost (cm)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Obwód głowy (cm)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Oddechy/min</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Nasycenie O2 (%)</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Przedwczesny</th>
       </tr>
     </thead>
     <tbody>
@@ -56,24 +56,24 @@
           <td style="padding: 10px; border: 1px solid #ddd;">{{ param.obwod_glowy_cm }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ param.oddechy_na_min }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ param.natlenienie_spO2 }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{% if param.czy_wczesniak %}Yes{% else %}No{% endif %}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{% if param.czy_wczesniak %}Tak{% else %}Nie{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 {% else %}
-  <p><em>No measurements recorded yet.</em></p>
+  <p><em>Brak zarejestrowanych pomiarów.</em></p>
 {% endif %}
 
 {% if apgar_scores %}
-  <h3>APGAR Scores</h3>
+  <h3>Wyniki APGAR</h3>
   <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
     <thead>
       <tr style="background: #34495e; color: white;">
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurement Date</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">1 Minute</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">5 Minutes</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">10 Minutes</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data pomiaru</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">1 minuta</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">5 minut</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">10 minut</th>
       </tr>
     </thead>
     <tbody>
@@ -88,11 +88,11 @@
     </tbody>
   </table>
 {% else %}
-  <p><em>No APGAR scores recorded yet.</em></p>
+  <p><em>Brak zarejestrowanych wyników APGAR.</em></p>
 {% endif %}
 
 <div style="margin-top: 30px;">
-  <a href="/raporty/" class="btn">Back to Reports</a>
-  <a href="/dodaj_noworodka/" class="btn" style="background: #27ae60;">Add New Newborn</a>
+  <a href="/raporty/" class="btn">Powrót do raportów</a>
+  <a href="/dodaj_noworodka/" class="btn" style="background: #27ae60;">Dodaj nowego noworodka</a>
 </div>
 {% endblock %}

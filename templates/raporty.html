@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Reports{% endblock %}
+{% block title %}Raporty{% endblock %}
 
 {% block content %}
-<h2>Reports — Newborns & Measurements</h2>
+<h2>Raporty — Noworodki i pomiary</h2>
 
 <style>
   .verdict-cell {
@@ -67,14 +67,14 @@
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
       <thead>
         <tr style="background: #2c3e50; color: white;">
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Name</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Date of Birth</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Added</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Gender</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Mother PESEL</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurements</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Imię</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data urodzenia</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Dodano</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Płeć</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">PESEL matki</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Pomiary</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Status</th>
-          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Verdict</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Werdykt</th>
         </tr>
       </thead>
       <tbody>
@@ -87,7 +87,7 @@
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.matka.pesel|default:"-" }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">
-              <strong>Measurements:</strong> {{ dziecko.parametry.count }}<br>
+              <strong>Pomiary:</strong> {{ dziecko.parametry.count }}<br>
               <strong>APGAR:</strong> {{ dziecko.apgar.count }}
             </td>
             <td style="padding: 10px; border: 1px solid #ddd;">
@@ -117,25 +117,25 @@
   <div class="pagination" style="margin-top: 20px; text-align: center;">
     <span class="step-links">
       {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo; first</a>
-        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        <a href="?page=1">&laquo; pierwsza</a>
+        <a href="?page={{ page_obj.previous_page_number }}">poprzednia</a>
       {% endif %}
 
       <span class="current">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
       </span>
 
       {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        <a href="?page={{ page_obj.next_page_number }}">następna</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">ostatnia &raquo;</a>
       {% endif %}
     </span>
   </div>
 {% else %}
-  <p>No newborns recorded yet. <a href="/dodaj_noworodka/">Add one now</a>.</p>
+  <p>Brak zarejestrowanych noworodków. <a href="/dodaj_noworodka/">Dodaj pierwszego</a>.</p>
 {% endif %}
 
 <p style="margin-top: 20px;">
-  <a href="/dodaj_noworodka/" class="btn-custom">Add New Newborn</a>
+  <a href="/dodaj_noworodka/" class="btn-custom">Dodaj nowego noworodka</a>
 </p>
 {% endblock %}

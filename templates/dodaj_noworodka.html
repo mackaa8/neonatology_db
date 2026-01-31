@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}Add Newborn{% endblock %}
+{% block title %}Dodaj noworodka{% endblock %}
 
 {% block content %}
-<h2>Add Newborn</h2>
-<p>Complete the form below to register a new newborn and record measurements.</p>
+<h2>Dodaj noworodka</h2>
+<p>Wypełnij poniższy formularz, aby zarejestrować nowego noworodka i wprowadzić pomiary.</p>
 
 {% if dziecko_form.errors or matka_form.errors or params_form.errors or apgar_form.errors %}
 <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
-  <strong>Errors in form:</strong>
+  <strong>Błędy w formularzu:</strong>
   {% if dziecko_form.errors %}
-    <div>Baby Data:</div>
+    <div>Dane dziecka:</div>
     {{ dziecko_form.errors }}
   {% endif %}
   {% if matka_form.errors %}
-    <div>Mother Data:</div>
+    <div>Dane matki:</div>
     {{ matka_form.errors }}
   {% endif %}
   {% if params_form.errors %}
-    <div>External Parameters:</div>
+    <div>Parametry zewnętrzne:</div>
     {{ params_form.errors }}
   {% endif %}
   {% if apgar_form.errors %}
-    <div>APGAR Scores:</div>
+    <div>Wyniki APGAR:</div>
     {{ apgar_form.errors }}
   {% endif %}
 </div>
@@ -31,29 +31,29 @@
 <form method="post" style="max-width: 600px;">
   {% csrf_token %}
   <fieldset>
-    <legend>Baby Data</legend>
+    <legend>Dane dziecka</legend>
     {{ dziecko_form.as_p }}
   </fieldset>
 
   <fieldset>
-    <legend>Mother Data (optional - fill if adding new mother)</legend>
+    <legend>Dane matki (opcjonalne - wypełnij jeśli dodajesz nową matkę)</legend>
     <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
-      You can either select an existing mother from the Baby Data section above, or add a new mother here.
+      Możesz wybrać istniejącą matkę z sekcji Dane dziecka powyżej, lub dodać nową matkę tutaj.
     </p>
     {{ matka_form.as_p }}
   </fieldset>
 
   <fieldset>
-    <legend>External Parameters</legend>
+    <legend>Parametry zewnętrzne</legend>
     {{ params_form.as_p }}
   </fieldset>
 
   <fieldset>
-    <legend>APGAR Scores</legend>
+    <legend>Wyniki APGAR</legend>
     {{ apgar_form.as_p }}
   </fieldset>
 
-  <button type="submit" class="btn">Submit</button>
-  <a href="/" class="btn" style="background: #95a5a6; margin-left: 10px;">Cancel</a>
+  <button type="submit" class="btn">Zapisz</button>
+  <a href="/" class="btn" style="background: #95a5a6; margin-left: 10px;">Anuluj</a>
 </form>
 {% endblock %}

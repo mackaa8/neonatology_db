@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Logowanie{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>Logowanie</h2>
 <form method="post">
   {% csrf_token %}
   <div style="margin-bottom: 15px;">
-    <label for="id_username">Username:</label><br>
+    <label for="id_username">Nazwa użytkownika:</label><br>
     <input type="text" id="id_username" name="username" required style="width: 200px; padding: 8px;">
   </div>
   <div style="margin-bottom: 15px;">
-    <label for="id_password">Password:</label><br>
+    <label for="id_password">Hasło:</label><br>
     <input type="password" id="id_password" name="password" required style="width: 200px; padding: 8px;">
   </div>
-  <button type="submit" class="btn">Login</button>
+  <button type="submit" class="btn">Zaloguj się</button>
 </form>
 {% if form.non_field_errors %}
-  <p style="color: red;">Invalid username or password.</p>
+  <p style="color: red;">Nieprawidłowa nazwa użytkownika lub hasło.</p>
 {% endif %}
 {% endblock %}

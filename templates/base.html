@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Little Archive — Neonatology Database | {% block title %}{% endblock %}</title>
+    <title>Mały Archiwum — Baza Neonatologiczna | {% block title %}{% endblock %}</title>
     <style>
       body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
       header { background: #0e284d; color: white; padding: 12px 20px; border-radius: 5px; }
@@ -391,14 +391,14 @@ z"/>
         </div>
         <nav>
           <div class="nav-items">
-            <a href="/">Home</a>
+            <a href="/">Strona główna</a>
             {% if user.is_authenticated %}
-              <a href="/dodaj_noworodka/">Add Newborn</a>
-              <a href="/raporty/">Reports</a>
-              <span>Welcome, {{ user.username }}</span>
-              <a href="/logout/">Logout</a>
+              <a href="/dodaj_noworodka/">Dodaj noworodka</a>
+              <a href="/raporty/">Raporty</a>
+              <span>Witaj, {{ user.username }}</span>
+              <a href="/logout/">Wyloguj</a>
             {% else %}
-              <a href="/login/">Login</a>
+              <a href="/login/">Zaloguj</a>
             {% endif %}
           </div>
         </nav>
@@ -415,7 +415,7 @@ z"/>
       {% block content %}{% endblock %}
     </main>
     <footer>
-      <small>Little Archive — Neonatology Database Management System</small>
+      <small>Mały Archiwum — System Zarządzania Bazą Neonatologiczną</small>
     </footer>
   </body>
 </html>

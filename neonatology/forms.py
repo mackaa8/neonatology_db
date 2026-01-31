@@ -8,33 +8,33 @@ class MatkaForm(forms.ModelForm):
         fields = ['pesel', 'imie', 'nazwisko', 'grupa_krwi', 'konflikt_serologiczny']
         labels = {
             'pesel': 'PESEL',
-            'imie': 'First Name',
-            'nazwisko': 'Last Name',
-            'grupa_krwi': 'Blood Type',
-            'konflikt_serologiczny': 'Serological Conflict'
+            'imie': 'Imię',
+            'nazwisko': 'Nazwisko',
+            'grupa_krwi': 'Grupa krwi',
+            'konflikt_serologiczny': 'Konflikt serologiczny'
         }
 
 
 class DzieckoForm(forms.ModelForm):
     data_urodzenia = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'}),
-        label='Date of Birth'
+        label='Data urodzenia'
     )
     
     class Meta:
         model = Dziecko
         fields = ['imie', 'data_urodzenia', 'plec', 'matka']
         labels = {
-            'imie': 'First Name',
-            'plec': 'Gender',
-            'matka': 'Mother (optional - you can add new mother below)'
+            'imie': 'Imię',
+            'plec': 'Płeć',
+            'matka': 'Matka (opcjonalne - możesz dodać nową matkę poniżej)'
         }
     
     matka = forms.ModelChoiceField(
         queryset=Matka.objects.all(),
         required=False,
-        empty_label="Select existing mother or add new below",
-        label='Existing Mother'
+        empty_label="Wybierz istniejącą matkę lub dodaj nową poniżej",
+        label='Istniejąca matka'
     )
 
 
@@ -43,12 +43,12 @@ class ParametryZewnetrzneForm(forms.ModelForm):
         model = ParametryZewnetrzne
         exclude = ['dziecko', 'lekarz', 'data_pomiaru']
         labels = {
-            'wzrost_cm': 'Height (cm)',
-            'waga_kg': 'Weight (kg)',
-            'czy_wczesniak': 'Premature',
-            'obwod_glowy_cm': 'Head Circumference (cm)',
-            'oddechy_na_min': 'Breaths/min',
-            'natlenienie_spO2': 'O2 Saturation (%)'
+            'wzrost_cm': 'Wzrost (cm)',
+            'waga_kg': 'Waga (kg)',
+            'czy_wczesniak': 'Wcześniak',
+            'obwod_glowy_cm': 'Obwód głowy (cm)',
+            'oddechy_na_min': 'Oddechy/min',
+            'natlenienie_spO2': 'Nasycenie tlenem (%)'
         }
 
 
@@ -57,7 +57,7 @@ class APGARScoreForm(forms.ModelForm):
         model = APGARScore
         exclude = ['dziecko', 'lekarz', 'data_pomiaru']
         labels = {
-            'apgar_1min': '1 Minute Score',
-            'apgar_5min': '5 Minute Score',
-            'apgar_10min': '10 Minute Score'
+            'apgar_1min': 'Wynik po 1 minucie',
+            'apgar_5min': 'Wynik po 5 minutach',
+            'apgar_10min': 'Wynik po 10 minutach'
         }
