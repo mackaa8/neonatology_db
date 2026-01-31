@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
-from .models import Dziecko, ParametryZewnetrzne, APGARScore
+from .models import Dziecko, ParametryZewnetrzne, APGARScore, Matka
 from .forms import DzieckoForm, ParametryZewnetrzneForm, APGARScoreForm, MatkaForm
 
 def index(request):
@@ -248,4 +248,14 @@ def historia_zmian(request, dziecko_id):
     return render(request, 'historia_zmian.html', {
         'dziecko': dziecko,
         'historia': historia
+    })
+
+@login_required
+def szczegoly_matki(request, matka_id):
+    matka = get_object_or_404(Matka, id=matka_id)
+    dzieci = matka.dzieci.all().order_by('-data_urodzenia')
+    
+    return render(request, 'szczegoly_matki.html', {
+        'matka': matka,
+        'dzieci': dzieci
     })

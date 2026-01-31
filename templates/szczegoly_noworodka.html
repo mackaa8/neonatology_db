@@ -28,7 +28,13 @@
     </tr>
     <tr>
       <td style="padding: 8px; font-weight: bold;">PESEL matki:</td>
-      <td style="padding: 8px;">{{ dziecko.pesel_matki }}</td>
+      <td style="padding: 8px;">
+        {% if dziecko.matka %}
+          <a href="{% url 'szczegoly_matki' dziecko.matka.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.matka.pesel }}</a>
+        {% else %}
+          {{ dziecko.pesel_matki|default:"-" }}
+        {% endif %}
+      </td>
     </tr>
   </table>
 </div>

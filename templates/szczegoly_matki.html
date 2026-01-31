@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ matka.imie }} {{ matka.nazwisko }} — Szczegóły matki{% endblock %}
+
+{% block content %}
+<h2>{{ matka.imie }} {{ matka.nazwisko }} — Szczegóły matki</h2>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'raporty' %}" class="btn-custom">Powrót do raportów</a>
+</div>
+
+<div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+  <h3>Informacje o matce</h3>
+  <table style="width: 100%;">
+    <tr>
+      <td style="padding: 8px; font-weight: bold; width: 150px;">Imię:</td>
+      <td style="padding: 8px;">{{ matka.imie }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Nazwisko:</td>
+      <td style="padding: 8px;">{{ matka.nazwisko }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">PESEL:</td>
+      <td style="padding: 8px;">{{ matka.pesel }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Grupa krwi:</td>
+      <td style="padding: 8px;">{{ matka.grupa_krwi|default:"-" }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Konflikt serologiczny:</td>
+      <td style="padding: 8px;">{% if matka.konflikt_serologiczny %}Tak{% else %}Nie{% endif %}</td>
+    </tr>
+  </table>
+</div>
+
+{% if dzieci %}
+  <h3>Dzieci matki ({{ dzieci|length }})</h3>
+  <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+    <thead>
+      <tr style="background: #34495e; color: white;">
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Imię</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data urodzenia</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Płeć</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Dodano</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dziecko in dzieci %}
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="padding: 10px; border: 1px solid #ddd;"><strong><a href="{% url 'szczegoly_noworodka' dziecko.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.imie }}</a></strong></td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.created_at|date:"Y-m-d H:i" }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn" style="font-size: 0.8em;">Szczegóły</a>
+            <a href="{% url 'historia_zmian' dziecko.id %}" class="btn" style="font-size: 0.8em; background: #f39c12;">Historia</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p><em>Brak zarejestrowanych dzieci dla tej matki.</em></p>
+{% endif %}
+
+<div style="margin-top: 30px;">
+  <a href="/raporty/" class="btn">Powrót do raportów</a>
+  <a href="/dodaj_noworodka/" class="btn" style="background: #27ae60;">Dodaj nowego noworodka</a>
+</div>
+{% endblock %}

@@ -85,7 +85,13 @@
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.created_at|date:"Y-m-d H:i" }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.matka.pesel|default:"-" }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              {% if dziecko.matka %}
+                <a href="{% url 'szczegoly_matki' dziecko.matka.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.matka.pesel }}</a>
+              {% else %}
+                -
+              {% endif %}
+            </td>
             <td style="padding: 10px; border: 1px solid #ddd;">
               <strong>Pomiary:</strong> {{ dziecko.parametry.count }}<br>
               <strong>APGAR:</strong> {{ dziecko.apgar.count }}
