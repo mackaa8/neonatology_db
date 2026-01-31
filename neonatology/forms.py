@@ -1,5 +1,18 @@
 from django import forms
-from .models import Dziecko, ParametryZewnetrzne, APGARScore
+from .models import Dziecko, ParametryZewnetrzne, APGARScore, Matka
+
+
+class MatkaForm(forms.ModelForm):
+    class Meta:
+        model = Matka
+        fields = ['pesel', 'imie', 'nazwisko', 'grupa_krwi', 'konflikt_serologiczny']
+        labels = {
+            'pesel': 'PESEL',
+            'imie': 'First Name',
+            'nazwisko': 'Last Name',
+            'grupa_krwi': 'Blood Type',
+            'konflikt_serologiczny': 'Serological Conflict'
+        }
 
 
 class DzieckoForm(forms.ModelForm):
@@ -14,8 +27,15 @@ class DzieckoForm(forms.ModelForm):
         labels = {
             'imie': 'First Name',
             'plec': 'Gender',
-            'matka': 'Mother'
+            'matka': 'Mother (optional - you can add new mother below)'
         }
+    
+    matka = forms.ModelChoiceField(
+        queryset=Matka.objects.all(),
+        required=False,
+        empty_label="Select existing mother or add new below",
+        label='Existing Mother'
+    )
 
 
 class ParametryZewnetrzneForm(forms.ModelForm):

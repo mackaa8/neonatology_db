@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Historia zmian — {{ dziecko.imie }}{% endblock %}
+
+{% block content %}
+<h2>Historia zmian — {{ dziecko.imie }}</h2>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn-custom">Powrót do szczegółów</a>
+  <a href="{% url 'raporty' %}" class="btn-custom" style="margin-left: 10px;">Powrót do raportów</a>
+</div>
+
+{% if historia %}
+  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+      <tr style="background: #2c3e50; color: white;">
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data zmiany</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Lekarz</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Typ</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Szczegóły</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in historia %}
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            {{ item.data|date:"Y-m-d H:i" }}
+            {% if forloop.first %}<strong>(Aktualna)</strong>{% endif %}
+          </td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            {{ item.lekarz.get_full_name|default:item.lekarz.username|default:"Nieznany" }}
+          </td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            <span class="badge badge-{{ item.typ|lower }}">{{ item.typ }}</span>
+          </td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ item.opis }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            {% if not forloop.first %}
+              <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="version_id" value="{{ item.object.id }}">
+                <input type="hidden" name="model_type" value="{{ item.model_type }}">
+                <button type="submit" name="restore_version" class="btn-restore"
+                        onclick="return confirm('Czy na pewno chcesz przywrócić tę wersję? Spowoduje to utworzenie nowego rekordu z tymi wartościami.')">
+                  PRZYWRÓĆ TĘ WERSJĘ
+                </button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>Brak historii zmian dla tego dziecka.</p>
+{% endif %}
+
+<style>
+  .badge-parametry {
+    background: #3498db;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
+  .badge-apgar {
+    background: #e67e22;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
+  .btn-restore {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-restore:hover {
+    background: #229954;
+  }
+  .btn-custom {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0e284d;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  .btn-custom:hover {
+    background: #1a3a5c;
+  }
+</style>
+{% endblock %}

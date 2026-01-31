@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from simple_history import register
+from simple_history.models import HistoricalRecords
 
 # --- 1. Tabela Matka (Mother) ---
 class Matka(models.Model):
@@ -38,6 +40,8 @@ class ParametryZewnetrzne(models.Model):
     oddechy_na_min = models.IntegerField()
     natlenienie_spO2 = models.IntegerField()
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"Parametry dla {self.dziecko.imie} z {self.data_pomiaru.date()}"
 
@@ -50,6 +54,8 @@ class APGARScore(models.Model):
     apgar_1min = models.IntegerField(help_text="Wynik po 1 minucie")
     apgar_5min = models.IntegerField(help_text="Wynik po 5 minutach")
     apgar_10min = models.IntegerField(null=True, blank=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"APGAR dla {self.dziecko.imie}: {self.apgar_5min} (5min)"

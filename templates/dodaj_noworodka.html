@@ -6,12 +6,16 @@
 <h2>Add Newborn</h2>
 <p>Complete the form below to register a new newborn and record measurements.</p>
 
-{% if dziecko_form.errors or params_form.errors or apgar_form.errors %}
+{% if dziecko_form.errors or matka_form.errors or params_form.errors or apgar_form.errors %}
 <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
   <strong>Errors in form:</strong>
   {% if dziecko_form.errors %}
     <div>Baby Data:</div>
     {{ dziecko_form.errors }}
+  {% endif %}
+  {% if matka_form.errors %}
+    <div>Mother Data:</div>
+    {{ matka_form.errors }}
   {% endif %}
   {% if params_form.errors %}
     <div>External Parameters:</div>
@@ -29,6 +33,14 @@
   <fieldset>
     <legend>Baby Data</legend>
     {{ dziecko_form.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Mother Data (optional - fill if adding new mother)</legend>
+    <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+      You can either select an existing mother from the Baby Data section above, or add a new mother here.
+    </p>
+    {{ matka_form.as_p }}
   </fieldset>
 
   <fieldset>

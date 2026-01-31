@@ -5,6 +5,11 @@
 {% block content %}
 <h2>{{ dziecko.imie }} — Newborn Details</h2>
 
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'historia_zmian' dziecko.id %}" class="btn-custom">Historia zmian</a>
+  <a href="{% url 'raporty' %}" class="btn-custom" style="margin-left: 10px;">Powrót do raportów</a>
+</div>
+
 <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
   <h3>Basic Information</h3>
   <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;"><em>Data from database — not entered by user</em></p>
