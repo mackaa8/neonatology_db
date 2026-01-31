@@ -395,7 +395,7 @@ z"/>
             {% if user.is_authenticated %}
               <a href="/dodaj_noworodka/">Dodaj noworodka</a>
               <a href="/raporty/">Raporty</a>
-              <span>Witaj, {{ user.username }}</span>
+              <a href="/panel_admina/">Witaj, {{ user.username }}</a>
               <a href="/logout/">Wyloguj</a>
             {% else %}
               <a href="/login/">Zaloguj</a>

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Panel administratora{% endblock %}
+
+{% block content %}
+<h2>Panel administratora — {{ user.username }}</h2>
+
+<div class="stats-container" style="display: flex; gap: 20px; margin-bottom: 30px;">
+    <div class="stat-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; flex: 1;">
+        <h3 style="margin: 0 0 10px 0; color: #0e284d;">Liczba noworodków</h3>
+        <div style="font-size: 2em; font-weight: bold; color: #3498db;">{{ liczba_dzieci }}</div>
+    </div>
+    <div class="stat-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; flex: 1;">
+        <h3 style="margin: 0 0 10px 0; color: #0e284d;">Liczba matek</h3>
+        <div style="font-size: 2em; font-weight: bold; color: #e74c3c;">{{ liczba_matek }}</div>
+    </div>
+</div>
+
+<h3>Moje noworodki</h3>
+{% if dzieci %}
+<div class="table-container">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+        <thead>
+            <tr style="background: #0e284d; color: white;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Imię</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Data urodzenia</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Płeć</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Grupa krwi</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Matka</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dziecko in dzieci %}
+            <tr style="background: {% cycle '#f9f9f9' 'white' %};">
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ dziecko.imie }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia|date:"d.m.Y" }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ dziecko.grupa_krwi|default:"-" }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    {% if dziecko.matka %}
+                        <a href="{% url 'szczegoly_matki' dziecko.matka.id %}">{{ dziecko.matka.imie }} {{ dziecko.matka.nazwisko }}</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn" style="padding: 6px 12px; font-size: 0.9em;">Szczegóły</a>
+                    <a href="{% url 'historia_zmian' dziecko.id %}" class="btn" style="padding: 6px 12px; font-size: 0.9em; background: #f39c12;">Historia</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; color: #6c757d;">
+    Nie dodałeś jeszcze żadnych noworodków.
+    <br><br>
+    <a href="/dodaj_noworodka/" class="btn">Dodaj pierwszego noworodka</a>
+</p>
+{% endif %}
+
+<h3>Ostatnie zmiany</h3>
+{% if ostatnie_zmiany %}
+<div class="table-container">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #0e284d; color: white;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Data</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Typ</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Obiekt</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Opis</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for zmiana in ostatnie_zmiany %}
+            <tr style="background: {% cycle '#f9f9f9' 'white' %};">
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ zmiana.data|date:"d.m.Y H:i" }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    <span class="badge" style="background: {% if zmiana.typ == 'Dziecko' %}#3498db{% elif zmiana.typ == 'Parametry' %}#e74c3c{% elif zmiana.typ == 'APGAR' %}#f39c12{% else %}#95a5a6{% endif %};">{{ zmiana.typ }}</span>
+                </td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ zmiana.obiekt }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ zmiana.opis }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    <a href="{% url 'szczegoly_noworodka' zmiana.dziecko_id %}" class="btn" style="padding: 4px 8px; font-size: 0.8em;">Zobacz</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 8px; color: #6c757d;">
+    Brak zmian w historii.
+</p>
+{% endif %}
+
+<style>
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8em;
+    }
+</style>
+{% endblock %}

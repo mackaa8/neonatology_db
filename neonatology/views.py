@@ -406,3 +406,67 @@ def edytuj_apgar(request, dziecko_id, apgar_id):
         'dziecko': dziecko,
         'apgar': apgar
     })
+
+@login_required
+def panel_admina(request):
+    """Panel administratora - pokazuje noworodki dodane przez aktualnego użytkownika."""
+    
+    # Pobierz wszystkie noworodki dodane przez aktualnego użytkownika
+    dzieci_uzytkownika = Dziecko.objects.filter(
+        parametry__lekarz=request.user
+    ).distinct().prefetch_related('parametry', 'apgar', 'matka').order_by('-created_at')
+    
+    # Statystyki
+    liczba_dzieci = dzieci_uzytkownika.count()
+    liczba_matek = Matka.objects.filter(
+        dzieci__parametry__lekarz=request.user
+    ).distinct().count()
+    
+    # Pobierz ostatnie zmiany w historii
+    ostatnie_zmiany = []
+    
+    # Zmiany w dzieciach
+    for dziecko in dzieci_uzytkownika[:10]:  # ostatnie 10 dzieci
+        for history_item in dziecko.history.all()[:5]:  # ostatnie 5 zmian na dziecko
+            ostatnie_zmiany.append({
+                'data': history_item.history_date,
+                'typ': 'Dziecko',
+                'obiekt': f"{dziecko.imie} {dziecko.matka.nazwisko if dziecko.matka else ''}",
+                'opis': f"Zmiana w danych dziecka",
+                'dziecko_id': dziecko.id
+            })
+    
+    # Zmiany w parametrach
+    parametry_uzytkownika = ParametryZewnetrzne.objects.filter(lekarz=request.user)
+    for param in parametry_uzytkownika[:20]:  # ostatnie 20 parametrów
+        for history_item in param.history.all()[:3]:  # ostatnie 3 zmiany na parametr
+            ostatnie_zmiany.append({
+                'data': history_item.history_date,
+                'typ': 'Parametry',
+                'obiekt': f"{param.dziecko.imie} {param.dziecko.matka.nazwisko if param.dziecko.matka else ''}",
+                'opis': f"Waga: {history_item.waga_kg}kg, SpO2: {history_item.natlenienie_spO2}%",
+                'dziecko_id': param.dziecko.id
+            })
+    
+    # Zmiany w APGAR
+    apgar_uzytkownika = APGARScore.objects.filter(lekarz=request.user)
+    for apgar in apgar_uzytkownika[:20]:  # ostatnie 20 wyników APGAR
+        for history_item in apgar.history.all()[:3]:  # ostatnie 3 zmiany na APGAR
+            ostatnie_zmiany.append({
+                'data': history_item.history_date,
+                'typ': 'APGAR',
+                'obiekt': f"{apgar.dziecko.imie} {apgar.dziecko.matka.nazwisko if apgar.dziecko.matka else ''}",
+                'opis': f"1min: {history_item.apgar_1min}, 5min: {history_item.apgar_5min}",
+                'dziecko_id': apgar.dziecko.id
+            })
+    
+    # Sortuj ostatnie zmiany po dacie (najnowsze pierwsze)
+    ostatnie_zmiany.sort(key=lambda x: x['data'], reverse=True)
+    ostatnie_zmiany = ostatnie_zmiany[:20]  # tylko 20 ostatnich zmian
+    
+    return render(request, 'panel_admina.html', {
+        'dzieci': dzieci_uzytkownika,
+        'liczba_dzieci': liczba_dzieci,
+        'liczba_matek': liczba_matek,
+        'ostatnie_zmiany': ostatnie_zmiany
+    })

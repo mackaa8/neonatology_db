@@ -14,4 +14,5 @@ urlpatterns = [
     path('noworodek/<int:dziecko_id>/apgar/<int:apgar_id>/edytuj/', views.edytuj_apgar, name='edytuj_apgar'),
     path('matka/<int:matka_id>/', views.szczegoly_matki, name='szczegoly_matki'),
     path('matka/<int:matka_id>/edytuj/', views.edytuj_matke, name='edytuj_matke'),
+    path('panel_admina/', views.panel_admina, name='panel_admina'),
 ]
