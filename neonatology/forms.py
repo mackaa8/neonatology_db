@@ -10,11 +10,11 @@ class DzieckoForm(forms.ModelForm):
     
     class Meta:
         model = Dziecko
-        fields = ['imie', 'data_urodzenia', 'plec', 'pesel_matki']
+        fields = ['imie', 'data_urodzenia', 'plec', 'matka']
         labels = {
             'imie': 'First Name',
             'plec': 'Gender',
-            'pesel_matki': 'Mother PESEL'
+            'matka': 'Mother'
         }
 
 

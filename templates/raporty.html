@@ -5,53 +5,137 @@
 {% block content %}
 <h2>Reports — Newborns & Measurements</h2>
 
-{% if dzieci_status %}
-  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-    <thead>
-      <tr style="background: #2c3e50; color: white;">
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Name</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Date of Birth</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Added</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Gender</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Mother PESEL</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurements</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Status</th>
-        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Verdict</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in dzieci_status %}
-        {% with dziecko=item.dziecko status=item.status %}
-        <tr style="border-bottom: 1px solid #ddd;">
-          <td style="padding: 10px; border: 1px solid #ddd;"><strong><a href="{% url 'szczegoly_noworodka' dziecko.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.imie }}</a></strong></td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.created_at|date:"Y-m-d H:i" }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.pesel_matki }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">
-            <strong>Measurements:</strong> {{ dziecko.parametry.count }}<br>
-            <strong>APGAR:</strong> {{ dziecko.apgar.count }}
-          </td>
-          <td style="padding: 10px; border: 1px solid #ddd;">
-            {% if status == 'Hospitalizacja' %}
-              <span class="badge badge-hospital" title="Hospitalizacja">Hospitalizacja</span>
-            {% elif status == 'Monitorowanie' %}
-              <span class="badge badge-monitor" title="Monitorowanie">Monitorowanie</span>
-            {% else %}
-              <span class="badge badge-ok" title="Parametry w normie">OK</span>
-            {% endif %}
-          </td>
-          <td style="padding: 10px; border: 1px solid #ddd; white-space: pre-line;">{{ item.werdykt }}</td>
+<style>
+  .verdict-cell {
+    font-size: 0.9em;
+    line-height: 1.5;
+    background: #fafafa;
+    border-radius: 4px;
+    padding: 8px !important;
+  }
+  .verdict-warning {
+    color: #c0392b;
+    font-weight: 600;
+    border-left: 4px solid #e74c3c;
+    padding-left: 10px;
+  }
+  .verdict-ok {
+    color: #27ae60;
+    font-weight: 600;
+  }
+  .table-container {
+    overflow-x: auto;
+  }
+  .pagination {
+    margin-top: 20px;
+  }
+  .pagination a, .pagination .current {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: white;
+    background: #0e284d;
+  }
+  .pagination a:hover {
+    background: #1a3a5c;
+  }
+  .pagination .current {
+    background: #0e284d;
+    color: white;
+    border-color: #0e284d;
+  }
+  .btn-custom {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0e284d;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  .btn-custom:hover {
+    background: #1a3a5c;
+  }
+</style>
+
+{% if page_obj %}
+  <div class="table-container">
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background: #2c3e50; color: white;">
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Name</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Date of Birth</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Added</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Gender</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Mother PESEL</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Measurements</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Status</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Verdict</th>
         </tr>
-        {% endwith %}
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for item in page_obj %}
+          {% with dziecko=item.dziecko status=item.status werdykt=item.werdykt %}
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong><a href="{% url 'szczegoly_noworodka' dziecko.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.imie }}</a></strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.created_at|date:"Y-m-d H:i" }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.matka.pesel|default:"-" }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <strong>Measurements:</strong> {{ dziecko.parametry.count }}<br>
+              <strong>APGAR:</strong> {{ dziecko.apgar.count }}
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              {% if status == 'Hospitalizacja' %}
+                <span class="badge badge-hospital" title="Hospitalizacja">Hospitalizacja</span>
+              {% elif status == 'Monitorowanie' %}
+                <span class="badge badge-monitor" title="Monitorowanie">Monitorowanie</span>
+              {% else %}
+                <span class="badge badge-ok" title="Parametry w normie">OK</span>
+              {% endif %}
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;" class="verdict-cell">
+              {% if "UWAGA" in werdykt %}
+                <div class="verdict-warning">{{ werdykt|linebreaks }}</div>
+              {% else %}
+                <div class="verdict-ok">{{ werdykt }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" style="margin-top: 20px; text-align: center;">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
 {% else %}
   <p>No newborns recorded yet. <a href="/dodaj_noworodka/">Add one now</a>.</p>
 {% endif %}
 
 <p style="margin-top: 20px;">
-  <a href="/dodaj_noworodka/" class="btn">Add New Newborn</a>
+  <a href="/dodaj_noworodka/" class="btn-custom">Add New Newborn</a>
 </p>
 {% endblock %}

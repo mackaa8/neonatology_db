@@ -2,14 +2,25 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# --- 1. Tabela Dziecko (Baby) ---
+# --- 1. Tabela Matka (Mother) ---
+class Matka(models.Model):
+    pesel = models.CharField(max_length=11, unique=True)
+    imie = models.CharField(max_length=100)
+    nazwisko = models.CharField(max_length=100)
+    grupa_krwi = models.CharField(max_length=5, blank=True)
+    konflikt_serologiczny = models.BooleanField(default=False, help_text='Czy występuje konflikt serologiczny (np. Rh)')
+
+    def __str__(self):
+        return f"{self.imie} {self.nazwisko} ({self.pesel})"
+
+# --- 2. Tabela Dziecko (Baby) ---
 class Dziecko(models.Model):
     imie = models.CharField(max_length=100)
     data_urodzenia = models.DateField()
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     PLEC_CHOICES = [('M', 'Mężczyzna'), ('K', 'Kobieta')]
     plec = models.CharField(max_length=1, choices=PLEC_CHOICES)
-    pesel_matki = models.CharField(max_length=11, unique=True)
+    matka = models.ForeignKey(Matka, on_delete=models.CASCADE, related_name='dzieci', blank=True, null=True)
 
     def __str__(self):
         return f"{self.imie} ({self.data_urodzenia})"

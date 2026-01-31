@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
+from django.core.paginator import Paginator
 from .models import Dziecko, ParametryZewnetrzne, APGARScore
 from .forms import DzieckoForm, ParametryZewnetrzneForm, APGARScoreForm
 
@@ -64,7 +65,7 @@ def dodaj_noworodka(request):
 @login_required
 def raporty(request):
     """Doctors' dashboard: list all babies and their records."""
-    dzieci = Dziecko.objects.all().prefetch_related('parametry', 'apgar')
+    dzieci = Dziecko.objects.all().prefetch_related('parametry', 'apgar', 'matka')
 
     dzieci_status = []
     for dziecko in dzieci:
@@ -98,7 +99,12 @@ def raporty(request):
 
         dzieci_status.append({'dziecko': dziecko, 'status': status, 'werdykt': werdykt})
 
-    return render(request, 'raporty.html', {'dzieci_status': dzieci_status})
+    # Pagination
+    paginator = Paginator(dzieci_status, 50)  # 50 records per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'raporty.html', {'page_obj': page_obj})
 
 
 @login_required

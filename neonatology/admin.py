@@ -1,12 +1,19 @@
 from django.contrib import admin
-from .models import Dziecko, ParametryZewnetrzne, APGARScore
+from .models import Dziecko, ParametryZewnetrzne, APGARScore, Matka
+
+
+@admin.register(Matka)
+class MatkaAdmin(admin.ModelAdmin):
+    list_display = ('imie', 'nazwisko', 'pesel', 'grupa_krwi')
+    search_fields = ('imie', 'nazwisko', 'pesel')
+    list_filter = ('grupa_krwi', 'konflikt_serologiczny')
 
 
 @admin.register(Dziecko)
 class DzieckoAdmin(admin.ModelAdmin):
-    list_display = ('imie', 'data_urodzenia', 'plec', 'pesel_matki')
-    search_fields = ('imie', 'pesel_matki')
-    list_filter = ('plec', 'data_urodzenia')
+    list_display = ('imie', 'data_urodzenia', 'plec', 'matka')
+    search_fields = ('imie', 'matka__pesel', 'matka__imie', 'matka__nazwisko')
+    list_filter = ('plec', 'data_urodzenia', 'matka')
     readonly_fields = ('id',)
 
 
