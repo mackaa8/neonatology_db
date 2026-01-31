@@ -7,6 +7,7 @@
 
 <div style="margin-bottom: 20px;">
   <a href="{% url 'historia_zmian' dziecko.id %}" class="btn-custom">Historia zmian</a>
+  <a href="{% url 'edytuj_dziecko' dziecko.id %}" class="btn-custom" style="margin-left: 10px; background: #f39c12;">Edytuj dziecko</a>
   <a href="{% url 'raporty' %}" class="btn-custom" style="margin-left: 10px;">Powrót do raportów</a>
 </div>
 
@@ -25,6 +26,10 @@
     <tr>
       <td style="padding: 8px; font-weight: bold;">Płeć:</td>
       <td style="padding: 8px;">{{ dziecko.get_plec_display }}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; font-weight: bold;">Grupa krwi:</td>
+      <td style="padding: 8px;">{{ dziecko.grupa_krwi|default:"-" }}</td>
     </tr>
     <tr>
       <td style="padding: 8px; font-weight: bold;">PESEL matki:</td>
@@ -51,6 +56,7 @@
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Oddechy/min</th>
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Nasycenie O2 (%)</th>
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Przedwczesny</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Akcje</th>
       </tr>
     </thead>
     <tbody>
@@ -63,6 +69,9 @@
           <td style="padding: 10px; border: 1px solid #ddd;">{{ param.oddechy_na_min }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ param.natlenienie_spO2 }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{% if param.czy_wczesniak %}Tak{% else %}Nie{% endif %}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            <a href="{% url 'edytuj_parametry' dziecko.id param.id %}" class="btn" style="font-size: 0.8em; background: #f39c12;">Edytuj</a>
+          </td>
         </tr>
       {% endfor %}
     </tbody>
@@ -80,6 +89,7 @@
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">1 minuta</th>
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">5 minut</th>
         <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">10 minut</th>
+        <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Akcje</th>
       </tr>
     </thead>
     <tbody>
@@ -89,6 +99,9 @@
           <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_1min }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_5min }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ apgar.apgar_10min|default:"—" }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            <a href="{% url 'edytuj_apgar' dziecko.id apgar.id %}" class="btn" style="font-size: 0.8em; background: #f39c12;">Edytuj</a>
+          </td>
         </tr>
       {% endfor %}
     </tbody>

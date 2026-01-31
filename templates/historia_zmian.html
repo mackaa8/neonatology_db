@@ -29,14 +29,18 @@
             {% if forloop.first %}<strong>(Aktualna)</strong>{% endif %}
           </td>
           <td style="padding: 10px; border: 1px solid #ddd;">
-            {{ item.lekarz.get_full_name|default:item.lekarz.username|default:"Nieznany" }}
+            {% if item.lekarz %}
+              {{ item.lekarz.get_full_name|default:item.lekarz.username|default:"Nieznany" }}
+            {% else %}
+              Nieznany
+            {% endif %}
           </td>
           <td style="padding: 10px; border: 1px solid #ddd;">
             <span class="badge badge-{{ item.typ|lower }}">{{ item.typ }}</span>
           </td>
           <td style="padding: 10px; border: 1px solid #ddd;">{{ item.opis }}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">
-            {% if not forloop.first %}
+            {% if not forloop.first and item.model_type in 'parametry,apgar' %}
               <form method="post" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="version_id" value="{{ item.object.id }}">
@@ -57,6 +61,20 @@
 {% endif %}
 
 <style>
+  .badge-dziecko {
+    background: #9b59b6;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
+  .badge-matka {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
   .badge-parametry {
     background: #3498db;
     color: white;

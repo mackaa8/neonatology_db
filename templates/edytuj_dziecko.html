@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj dziecko — {{ dziecko.imie }}{% endblock %}
+
+{% block content %}
+<h2>Edytuj dane dziecka: {{ dziecko.imie }}</h2>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn-custom">Powrót do szczegółów</a>
+</div>
+
+{% if form.errors %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+  <strong>Błędy w formularzu:</strong>
+  {{ form.errors }}
+</div>
+{% endif %}
+
+<form method="post" style="max-width: 600px;">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Dane dziecka</legend>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.imie.id_for_label }}">Imię:</label><br>
+      {{ form.imie }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.data_urodzenia.id_for_label }}">Data urodzenia:</label><br>
+      {{ form.data_urodzenia }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.plec.id_for_label }}">Płeć:</label><br>
+      {{ form.plec }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.grupa_krwi.id_for_label }}">Grupa krwi dziecka:</label><br>
+      {{ form.grupa_krwi }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.matka.id_for_label }}">Matka:</label><br>
+      {{ form.matka }}
+    </div>
+  </fieldset>
+
+  <button type="submit" class="btn" style="background: #27ae60;">Zapisz zmiany</button>
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn" style="margin-left: 10px;">Anuluj</a>
+</form>
+{% endblock %}

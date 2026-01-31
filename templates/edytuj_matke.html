@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj matkę — {{ matka.imie }} {{ matka.nazwisko }}{% endblock %}
+
+{% block content %}
+<h2>Edytuj dane matki: {{ matka.imie }} {{ matka.nazwisko }}</h2>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'szczegoly_matki' matka.id %}" class="btn-custom">Powrót do szczegółów matki</a>
+</div>
+
+{% if form.errors %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+  <strong>Błędy w formularzu:</strong>
+  {{ form.errors }}
+</div>
+{% endif %}
+
+<form method="post" style="max-width: 600px;">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Dane matki</legend>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.pesel.id_for_label }}">PESEL:</label><br>
+      {{ form.pesel }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.imie.id_for_label }}">Imię:</label><br>
+      {{ form.imie }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.nazwisko.id_for_label }}">Nazwisko:</label><br>
+      {{ form.nazwisko }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.grupa_krwi.id_for_label }}">Grupa krwi:</label><br>
+      {{ form.grupa_krwi }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.konflikt_serologiczny.id_for_label }}">Konflikt serologiczny:</label><br>
+      {{ form.konflikt_serologiczny }}
+    </div>
+  </fieldset>
+
+  <button type="submit" class="btn" style="background: #27ae60;">Zapisz zmiany</button>
+  <a href="{% url 'szczegoly_matki' matka.id %}" class="btn" style="margin-left: 10px;">Anuluj</a>
+</form>
+{% endblock %}

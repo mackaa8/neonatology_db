@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj parametry — {{ dziecko.imie }}{% endblock %}
+
+{% block content %}
+<h2>Edytuj parametry zewnętrzne dla: {{ dziecko.imie }}</h2>
+<p style="color: #666; font-size: 0.9em;">Data pomiaru: {{ parametry.data_pomiaru|date:"Y-m-d H:i" }}</p>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn-custom">Powrót do szczegółów</a>
+</div>
+
+{% if form.errors %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+  <strong>Błędy w formularzu:</strong>
+  {{ form.errors }}
+</div>
+{% endif %}
+
+<form method="post" style="max-width: 600px;">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Parametry zewnętrzne</legend>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.wzrost_cm.id_for_label }}">Wzrost (cm):</label><br>
+      {{ form.wzrost_cm }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.waga_kg.id_for_label }}">Waga (kg):</label><br>
+      {{ form.waga_kg }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.czy_wczesniak.id_for_label }}">Czy wcześniak:</label><br>
+      {{ form.czy_wczesniak }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.obwod_glowy_cm.id_for_label }}">Obwód głowy (cm):</label><br>
+      {{ form.obwod_glowy_cm }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.oddechy_na_min.id_for_label }}">Oddechy na minutę:</label><br>
+      {{ form.oddechy_na_min }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.natlenienie_spO2.id_for_label }}">Natlenienie SpO2 (%):</label><br>
+      {{ form.natlenienie_spO2 }}
+    </div>
+  </fieldset>
+
+  <button type="submit" class="btn" style="background: #27ae60;">Zapisz zmiany</button>
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn" style="margin-left: 10px;">Anuluj</a>
+</form>
+{% endblock %}

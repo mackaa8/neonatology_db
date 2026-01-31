@@ -71,6 +71,7 @@
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Data urodzenia</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Dodano</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Płeć</th>
+          <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Grupa krwi</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">PESEL matki</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Pomiary</th>
           <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Status</th>
@@ -85,6 +86,7 @@
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.data_urodzenia }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.created_at|date:"Y-m-d H:i" }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.get_plec_display }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ dziecko.grupa_krwi|default:"-" }}</td>
             <td style="padding: 10px; border: 1px solid #ddd;">
               {% if dziecko.matka %}
                 <a href="{% url 'szczegoly_matki' dziecko.matka.id %}" style="color: #3498db; text-decoration: none;">{{ dziecko.matka.pesel }}</a>

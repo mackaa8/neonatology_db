@@ -12,6 +12,8 @@ class Matka(models.Model):
     grupa_krwi = models.CharField(max_length=5, blank=True)
     konflikt_serologiczny = models.BooleanField(default=False, help_text='Czy występuje konflikt serologiczny (np. Rh)')
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.imie} {self.nazwisko} ({self.pesel})"
 
@@ -23,6 +25,9 @@ class Dziecko(models.Model):
     PLEC_CHOICES = [('M', 'Mężczyzna'), ('K', 'Kobieta')]
     plec = models.CharField(max_length=1, choices=PLEC_CHOICES)
     matka = models.ForeignKey(Matka, on_delete=models.CASCADE, related_name='dzieci', blank=True, null=True)
+    grupa_krwi = models.CharField(max_length=5, blank=True, help_text='Grupa krwi dziecka (np. A+, B-, 0+)')
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.imie} ({self.data_urodzenia})"

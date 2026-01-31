@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj APGAR — {{ dziecko.imie }}{% endblock %}
+
+{% block content %}
+<h2>Edytuj wyniki APGAR dla: {{ dziecko.imie }}</h2>
+<p style="color: #666; font-size: 0.9em;">Data pomiaru: {{ apgar.data_pomiaru|date:"Y-m-d H:i" }}</p>
+
+<div style="margin-bottom: 20px;">
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn-custom">Powrót do szczegółów</a>
+</div>
+
+{% if form.errors %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+  <strong>Błędy w formularzu:</strong>
+  {{ form.errors }}
+</div>
+{% endif %}
+
+<form method="post" style="max-width: 600px;">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Wyniki APGAR</legend>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.apgar_1min.id_for_label }}">APGAR 1 minuta:</label><br>
+      {{ form.apgar_1min }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.apgar_5min.id_for_label }}">APGAR 5 minut:</label><br>
+      {{ form.apgar_5min }}
+    </div>
+    <div style="margin-bottom: 15px;">
+      <label for="{{ form.apgar_10min.id_for_label }}">APGAR 10 minut (opcjonalne):</label><br>
+      {{ form.apgar_10min }}
+    </div>
+  </fieldset>
+
+  <button type="submit" class="btn" style="background: #27ae60;">Zapisz zmiany</button>
+  <a href="{% url 'szczegoly_noworodka' dziecko.id %}" class="btn" style="margin-left: 10px;">Anuluj</a>
+</form>
+{% endblock %}

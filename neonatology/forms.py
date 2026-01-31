@@ -23,11 +23,12 @@ class DzieckoForm(forms.ModelForm):
     
     class Meta:
         model = Dziecko
-        fields = ['imie', 'data_urodzenia', 'plec', 'matka']
+        fields = ['imie', 'data_urodzenia', 'plec', 'matka', 'grupa_krwi']
         labels = {
             'imie': 'Imię',
             'plec': 'Płeć',
-            'matka': 'Matka (opcjonalne - możesz dodać nową matkę poniżej)'
+            'matka': 'Matka (opcjonalne - możesz dodać nową matkę poniżej)',
+            'grupa_krwi': 'Grupa krwi dziecka'
         }
     
     matka = forms.ModelChoiceField(

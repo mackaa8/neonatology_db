@@ -121,6 +121,16 @@ def raporty(request):
         # Use the existing checker to produce a textual verdict
         werdykt = sprawdz_parametry(combined)
 
+        # Dodaj sprawdzenie konfliktu serologicznego
+        if dziecko.matka and dziecko.matka.konflikt_serologiczny and dziecko.grupa_krwi:
+            # Sprawdź czy grupy krwi są różne (uproszczona logika)
+            matka_grupa = dziecko.matka.grupa_krwi.lower() if dziecko.matka.grupa_krwi else ""
+            dziecko_grupa = dziecko.grupa_krwi.lower()
+            
+            # Jeśli matka ma Rh- a dziecko Rh+, lub inne niezgodności
+            if ('-' in matka_grupa and '+' in dziecko_grupa) or (matka_grupa != dziecko_grupa and matka_grupa and dziecko_grupa):
+                werdykt += "\nUWAGA: Możliwy konflikt serologiczny między matką a dzieckiem!"
+
         dzieci_status.append({'dziecko': dziecko, 'status': status, 'werdykt': werdykt})
 
     # Pagination
@@ -178,6 +188,67 @@ def historia_zmian(request, dziecko_id):
     """Wyświetla historię zmian dla konkretnego dziecka."""
     dziecko = get_object_or_404(Dziecko, id=dziecko_id)
     
+    # Pobierz historię dziecka
+    dziecko_history = []
+    for history_item in dziecko.history.all():
+        changes = []
+        if history_item.prev_record:
+            # Porównaj z poprzednią wersją
+            if history_item.imie != history_item.prev_record.imie:
+                changes.append(f"Imię: '{history_item.prev_record.imie}' → '{history_item.imie}'")
+            if history_item.data_urodzenia != history_item.prev_record.data_urodzenia:
+                changes.append(f"Data urodzenia: {history_item.prev_record.data_urodzenia} → {history_item.data_urodzenia}")
+            if history_item.plec != history_item.prev_record.plec:
+                changes.append(f"Płeć: {history_item.prev_record.get_plec_display()} → {history_item.get_plec_display()}")
+            if history_item.grupa_krwi != history_item.prev_record.grupa_krwi:
+                changes.append(f"Grupa krwi: '{history_item.prev_record.grupa_krwi}' → '{history_item.grupa_krwi}'")
+            if history_item.matka_id != history_item.prev_record.matka_id:
+                prev_matka = history_item.prev_record.matka.imie + " " + history_item.prev_record.matka.nazwisko if history_item.prev_record.matka else "Brak"
+                curr_matka = history_item.matka.imie + " " + history_item.matka.nazwisko if history_item.matka else "Brak"
+                changes.append(f"Matka: {prev_matka} → {curr_matka}")
+        else:
+            # Pierwsza wersja
+            changes.append(f"Pierwsza wersja - Imię: {history_item.imie}, Data urodzenia: {history_item.data_urodzenia}, Płeć: {history_item.get_plec_display()}")
+        
+        dziecko_history.append({
+            'data': history_item.history_date,
+            'lekarz': history_item.history_user,
+            'typ': 'Dziecko',
+            'opis': '; '.join(changes) if changes else 'Utworzenie rekordu dziecka',
+            'object': history_item,
+            'model_type': 'dziecko'
+        })
+    
+    # Pobierz historię matki jeśli istnieje
+    matka_history = []
+    if dziecko.matka:
+        for history_item in dziecko.matka.history.all():
+            changes = []
+            if history_item.prev_record:
+                if history_item.pesel != history_item.prev_record.pesel:
+                    changes.append(f"PESEL: '{history_item.prev_record.pesel}' → '{history_item.pesel}'")
+                if history_item.imie != history_item.prev_record.imie:
+                    changes.append(f"Imię: '{history_item.prev_record.imie}' → '{history_item.imie}'")
+                if history_item.nazwisko != history_item.prev_record.nazwisko:
+                    changes.append(f"Nazwisko: '{history_item.prev_record.nazwisko}' → '{history_item.nazwisko}'")
+                if history_item.grupa_krwi != history_item.prev_record.grupa_krwi:
+                    changes.append(f"Grupa krwi: '{history_item.prev_record.grupa_krwi}' → '{history_item.grupa_krwi}'")
+                if history_item.konflikt_serologiczny != history_item.prev_record.konflikt_serologiczny:
+                    prev_konflikt = "Tak" if history_item.prev_record.konflikt_serologiczny else "Nie"
+                    curr_konflikt = "Tak" if history_item.konflikt_serologiczny else "Nie"
+                    changes.append(f"Konflikt serologiczny: {prev_konflikt} → {curr_konflikt}")
+            else:
+                changes.append(f"Pierwsza wersja matki - {history_item.imie} {history_item.nazwisko}")
+            
+            matka_history.append({
+                'data': history_item.history_date,
+                'lekarz': history_item.history_user,
+                'typ': 'Matka',
+                'opis': '; '.join(changes) if changes else 'Utworzenie rekordu matki',
+                'object': history_item,
+                'model_type': 'matka'
+            })
+    
     # Pobierz historię parametrów
     parametry_history = []
     for param in dziecko.parametry.all():
@@ -208,7 +279,7 @@ def historia_zmian(request, dziecko_id):
             })
     
     # Połącz i posortuj historię
-    historia = parametry_history + apgar_history
+    historia = dziecko_history + matka_history + parametry_history + apgar_history
     historia.sort(key=lambda x: x['data'], reverse=True)
     
     # Obsługa przywracania wersji
@@ -258,4 +329,80 @@ def szczegoly_matki(request, matka_id):
     return render(request, 'szczegoly_matki.html', {
         'matka': matka,
         'dzieci': dzieci
+    })
+
+@login_required
+def edytuj_dziecko(request, dziecko_id):
+    dziecko = get_object_or_404(Dziecko, id=dziecko_id)
+    
+    if request.method == 'POST':
+        form = DzieckoForm(request.POST, instance=dziecko)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Dane dziecka zostały zaktualizowane.')
+            return redirect('szczegoly_noworodka', dziecko_id=dziecko.id)
+    else:
+        form = DzieckoForm(instance=dziecko)
+    
+    return render(request, 'edytuj_dziecko.html', {
+        'form': form,
+        'dziecko': dziecko
+    })
+
+@login_required
+def edytuj_matke(request, matka_id):
+    matka = get_object_or_404(Matka, id=matka_id)
+    
+    if request.method == 'POST':
+        form = MatkaForm(request.POST, instance=matka)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Dane matki zostały zaktualizowane.')
+            return redirect('szczegoly_matki', matka_id=matka.id)
+    else:
+        form = MatkaForm(instance=matka)
+    
+    return render(request, 'edytuj_matke.html', {
+        'form': form,
+        'matka': matka
+    })
+
+@login_required
+def edytuj_parametry(request, dziecko_id, param_id):
+    dziecko = get_object_or_404(Dziecko, id=dziecko_id)
+    parametry = get_object_or_404(ParametryZewnetrzne, id=param_id, dziecko=dziecko)
+    
+    if request.method == 'POST':
+        form = ParametryZewnetrzneForm(request.POST, instance=parametry)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Parametry zostały zaktualizowane.')
+            return redirect('szczegoly_noworodka', dziecko_id=dziecko.id)
+    else:
+        form = ParametryZewnetrzneForm(instance=parametry)
+    
+    return render(request, 'edytuj_parametry.html', {
+        'form': form,
+        'dziecko': dziecko,
+        'parametry': parametry
+    })
+
+@login_required
+def edytuj_apgar(request, dziecko_id, apgar_id):
+    dziecko = get_object_or_404(Dziecko, id=dziecko_id)
+    apgar = get_object_or_404(APGARScore, id=apgar_id, dziecko=dziecko)
+    
+    if request.method == 'POST':
+        form = APGARScoreForm(request.POST, instance=apgar)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Wyniki APGAR zostały zaktualizowane.')
+            return redirect('szczegoly_noworodka', dziecko_id=dziecko.id)
+    else:
+        form = APGARScoreForm(instance=apgar)
+    
+    return render(request, 'edytuj_apgar.html', {
+        'form': form,
+        'dziecko': dziecko,
+        'apgar': apgar
     })

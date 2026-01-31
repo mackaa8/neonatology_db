@@ -6,7 +6,8 @@
 <h2>{{ matka.imie }} {{ matka.nazwisko }} — Szczegóły matki</h2>
 
 <div style="margin-bottom: 20px;">
-  <a href="{% url 'raporty' %}" class="btn-custom">Powrót do raportów</a>
+  <a href="{% url 'edytuj_matke' matka.id %}" class="btn-custom" style="background: #f39c12;">Edytuj matkę</a>
+  <a href="{% url 'raporty' %}" class="btn-custom" style="margin-left: 10px;">Powrót do raportów</a>
 </div>
 
 <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
