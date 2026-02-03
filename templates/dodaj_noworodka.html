@@ -40,7 +40,9 @@
     <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
       Możesz wybrać istniejącą matkę z sekcji Dane dziecka powyżej, lub dodać nową matkę tutaj.
     </p>
-    {{ matka_form.as_p }}
+    <div id="matka-form-section">
+      {{ matka_form.as_p }}
+    </div>
   </fieldset>
 
   <fieldset>
@@ -56,4 +58,37 @@
   <button type="submit" class="btn">Zapisz</button>
   <a href="/" class="btn" style="background: #95a5a6; margin-left: 10px;">Anuluj</a>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const matkaSelect = document.querySelector('select[name="matka"]');
+    const matkaFormSection = document.getElementById('matka-form-section');
+    const matkaInputs = matkaFormSection ? matkaFormSection.querySelectorAll('input, select, textarea') : [];
+
+    function toggleMatkaForm() {
+        if (matkaSelect && matkaSelect.value) {
+            // Jeśli wybrano istniejącą matkę, ukryj i wyłącz pola formularza matki
+            matkaFormSection.style.display = 'none';
+            matkaInputs.forEach(input => {
+                input.disabled = true;
+                input.value = ''; // Wyczyść wartości
+            });
+        } else {
+            // Jeśli nie wybrano matki, pokaż i włącz pola formularza matki
+            matkaFormSection.style.display = 'block';
+            matkaInputs.forEach(input => {
+                input.disabled = false;
+            });
+        }
+    }
+
+    // Sprawdź początkowy stan
+    toggleMatkaForm();
+
+    // Nasłuchuj zmian w polu wyboru matki
+    if (matkaSelect) {
+        matkaSelect.addEventListener('change', toggleMatkaForm);
+    }
+});
+</script>
 {% endblock %}

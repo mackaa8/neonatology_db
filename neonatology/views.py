@@ -35,18 +35,25 @@ def dodaj_noworodka(request):
 
         # Sprawdź czy formularze są poprawne
         dziecko_valid = dziecko_form.is_valid()
-        matka_valid = matka_form.is_valid()
         params_valid = params_form.is_valid()
         apgar_valid = apgar_form.is_valid()
 
-        if dziecko_valid and params_valid and apgar_valid:
+        # Sprawdź formularz matki tylko jeśli użytkownik próbuje dodać nową matkę
+        matka_valid = True
+        if dziecko_valid:
+            wybrano_istniejaca_matke = bool(dziecko_form.cleaned_data.get('matka'))
+            if not wybrano_istniejaca_matke:
+                # Użytkownik nie wybrał istniejącej matki, sprawdź formularz matki
+                matka_valid = matka_form.is_valid()
+
+        if dziecko_valid and params_valid and apgar_valid and matka_valid:
             try:
                 # Obsługa matki
                 matka = None
                 if dziecko_form.cleaned_data.get('matka'):
                     # Wybrano istniejącą matkę
                     matka = dziecko_form.cleaned_data['matka']
-                elif matka_valid and any(matka_form.cleaned_data.values()):
+                elif matka_valid and 'matka_form' in locals() and any(matka_form.cleaned_data.values()):
                     # Dodano nową matkę
                     matka = matka_form.save()
 
