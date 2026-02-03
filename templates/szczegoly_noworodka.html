@@ -45,7 +45,7 @@
 </div>
 
 {% if parametry %}
-  <h3>Parametry zewnętrzne</h3>
+  <h3>Parametry zewnętrzne <a href="{% url 'dodaj_parametry' dziecko.id %}" class="btn" style="font-size: 0.8em; background: #3498db; margin-left: 15px;">+ Dodaj nowy pomiar</a></h3>
   <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
     <thead>
       <tr style="background: #34495e; color: white;">
@@ -81,7 +81,7 @@
 {% endif %}
 
 {% if apgar_scores %}
-  <h3>Wyniki APGAR</h3>
+  <h3>Wyniki APGAR <a href="{% url 'dodaj_apgar' dziecko.id %}" class="btn" style="font-size: 0.8em; background: #3498db; margin-left: 15px;">+ Dodaj nowy pomiar</a></h3>
   <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
     <thead>
       <tr style="background: #34495e; color: white;">

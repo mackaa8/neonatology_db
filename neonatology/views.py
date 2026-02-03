@@ -470,3 +470,47 @@ def panel_admina(request):
         'liczba_matek': liczba_matek,
         'ostatnie_zmiany': ostatnie_zmiany
     })
+
+@login_required
+def dodaj_parametry(request, dziecko_id):
+    """Dodaje nowe parametry do istniejącego dziecka."""
+    dziecko = get_object_or_404(Dziecko, id=dziecko_id)
+    
+    if request.method == 'POST':
+        form = ParametryZewnetrzneForm(request.POST)
+        if form.is_valid():
+            parametry = form.save(commit=False)
+            parametry.dziecko = dziecko
+            parametry.lekarz = request.user
+            parametry.save()
+            messages.success(request, 'Nowe parametry zostały dodane pomyślnie.')
+            return redirect('szczegoly_noworodka', dziecko_id=dziecko.id)
+    else:
+        form = ParametryZewnetrzneForm()
+    
+    return render(request, 'dodaj_parametry.html', {
+        'form': form,
+        'dziecko': dziecko
+    })
+
+@login_required
+def dodaj_apgar(request, dziecko_id):
+    """Dodaje nowe wyniki APGAR do istniejącego dziecka."""
+    dziecko = get_object_or_404(Dziecko, id=dziecko_id)
+    
+    if request.method == 'POST':
+        form = APGARScoreForm(request.POST)
+        if form.is_valid():
+            apgar = form.save(commit=False)
+            apgar.dziecko = dziecko
+            apgar.lekarz = request.user
+            apgar.save()
+            messages.success(request, 'Nowe wyniki APGAR zostały dodane pomyślnie.')
+            return redirect('szczegoly_noworodka', dziecko_id=dziecko.id)
+    else:
+        form = APGARScoreForm()
+    
+    return render(request, 'dodaj_apgar.html', {
+        'form': form,
+        'dziecko': dziecko
+    })
