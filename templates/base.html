@@ -396,7 +396,10 @@ z"/>
               <a href="/dodaj_noworodka/">Dodaj noworodka</a>
               <a href="/raporty/">Raporty</a>
               <a href="/panel_admina/">Witaj, {{ user.username }}</a>
-              <a href="/logout/">Wyloguj</a>
+              <form method="post" action="/logout/" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: white; text-decoration: none; cursor: pointer; padding: 0; font: inherit;">Wyloguj</button>
+              </form>
             {% else %}
               <a href="/login/">Zaloguj</a>
             {% endif %}
